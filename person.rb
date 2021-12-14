@@ -1,4 +1,25 @@
 class Person
-    def initialize()
-        
+  def initialize(age, name = "Unknown", parent_permission = true)
+    @id = Random.rand(1..1000)
+    @name = name
+    @age = age
+    @parent_permission = parent_permission
+  end
+  attr_reader :id
+  attr_accessor :name
+  attr_accessor :age
+
+  def is_of_age?(person)
+    if person.age >= 18
+      true
     end
+      false
+  end
+
+  def can_use_services?(person)
+    if person.is_of_age?(person) || person.parent_permission
+      true
+    end
+      false
+  end
+end
