@@ -14,13 +14,15 @@ class Person
     if person.age >= 18
       return true
     end
-      return false
+
+    return false
   end
 
   def can_use_services?(person)
     if person.is_of_age?(person) || person.parent_permission
       return true
     end
-      return false
+
+    return false
   end
 end
