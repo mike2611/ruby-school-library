@@ -20,4 +20,8 @@ class Person
     return true if person.of_age?(person) || person.parent_permission
     false
   end
+
+  def validate_name()
+    @name = @correct_name.corrector_name(@name)
+  end
 end
