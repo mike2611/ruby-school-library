@@ -1,5 +1,3 @@
-require './corrector'
-
 class Person
   def initialize(age, name = 'Unknown', parent_permission: true)
     @id = Random.rand(1..1000)
@@ -21,9 +19,5 @@ class Person
     return true if person.of_age?(person) || person.parent_permission
 
     false
-  end
-
-  def validate_name()
-    @name = @correct_name.corrector_name(@name)
   end
 end
