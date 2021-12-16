@@ -2,7 +2,7 @@ require './corrector'
 require 'pry'
 
 class Person
-  attr_reader :id, :parent_permission, rentals
+  attr_reader :id, :parent_permission, :rentals
   attr_accessor :name, :age
 
   def initialize(age, name = 'Unknown', parent_permission: true)
