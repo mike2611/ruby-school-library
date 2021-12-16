@@ -3,7 +3,7 @@ require 'pry'
 
 class Person
 
-  attr_reader :id, :parent_permission
+  attr_reader :id, :parent_permission, rentals
   attr_accessor :name, :age
   
   def initialize(age, name = 'Unknown', parent_permission: true)
@@ -12,6 +12,7 @@ class Person
     @age = age
     @parent_permission = parent_permission
     @correct_name = Corrector.new
+    @rentals = []
   end
 
   def of_age?(person)
