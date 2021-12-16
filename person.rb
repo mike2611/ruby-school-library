@@ -1,15 +1,19 @@
 require './corrector'
+require './rental'
+require 'pry'
 
 class Person
+  attr_reader :id, :parent_permission, :rentals
+  attr_accessor :name, :age
+
   def initialize(age, name = 'Unknown', parent_permission: true)
     @id = Random.rand(1..1000)
     @name = name
     @age = age
     @parent_permission = parent_permission
     @correct_name = Corrector.new
+    @rentals = []
   end
-  attr_reader :id, :parent_permission
-  attr_accessor :name, :age
 
   def of_age?(person)
     return true if person.age >= 18
@@ -25,5 +29,9 @@ class Person
 
   def validate_name()
     @name = @correct_name.corrector_name(@name)
+  end
+
+  def add_rental(date, book)
+    Rental.new(date, book, self)
   end
 end
