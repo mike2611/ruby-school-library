@@ -22,6 +22,12 @@ def show_books
   $books.each { |book| print "Title: #{book.title.chomp}, Author: #{book.author}" }
 end
 
+def get_book
+  puts 'Select a book from the following list by number'
+  $books.each_with_index { |book, index| print "#{index}) Title: #{book.title.chomp}, Author: #{book.author}" }
+  gets.chomp.to_i
+end
+
 def add_person(person)
   $people.push(person)
   puts 'Person created successfully'
@@ -35,6 +41,18 @@ def show_people
       print "[Teacher] Name: #{person.name.chomp}, ID: #{person.id.to_s.chomp}, Age: #{person.age}"
     end
   end
+end
+
+def get_person
+  puts 'Select a prson from the following list by number (not id)'
+  $people.each_with_index do |person, index|
+    if person.instance_of? Student
+      print "#{index}) [Student] Name: #{person.name.chomp}, ID: #{person.id.to_s.chomp}, Age: #{person.age}"
+    else
+      print "#{index}) [Teacher] Name: #{person.name.chomp}, ID: #{person.id.to_s.chomp}, Age: #{person.age}"
+    end
+  end
+  gets.chomp.to_i
 end
 
 def person_options(number)
@@ -69,6 +87,14 @@ def person_options(number)
   end
 end
 
+def create_rental
+ iBook = get_book
+ iPerson = get_person
+ print 'Date: '
+ date = gets.chomp
+ Rental.new(date, $books[iBook], $people[iPerson])
+end
+
 def general_options(number)
   case number
   when 1
@@ -81,6 +107,7 @@ def general_options(number)
   when 4
     add_book
   when 5
+    create_rental
   when 6
   when 7
     puts 'Goodbye'
