@@ -1,6 +1,6 @@
 class Classrom
   attr_accessor :label
-  attr_reader : students
+  attr_reader :students
 
   def initialized(label)
     @label = label
