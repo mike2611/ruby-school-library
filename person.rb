@@ -1,4 +1,5 @@
 require './corrector'
+require './rental'
 require 'pry'
 
 class Person
@@ -28,5 +29,9 @@ class Person
 
   def validate_name()
     @name = @correct_name.corrector_name(@name)
+  end
+
+  def add_rental(date, book)
+    Rental.new(date, book, self)
   end
 end
