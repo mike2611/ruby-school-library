@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-require './teacher'
-require './student'
-require './book'
-require './rental'
+require_relative './teacher'
+require_relative './student'
+require_relative './book'
+require_relative './rental'
 
 class Elements
   attr_accessor :people, :books
