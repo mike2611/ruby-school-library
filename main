@@ -68,12 +68,12 @@ def add_student(elements)
   name = gets
   print 'Has parent permission? [Y/N]: '
   parent = gets.chomp
-  arrayY = ['y', 'Y']
-  arrayN = ['N', 'N']
-  if arrayY.include?(parent)
+  array_y = %w[y Y]
+  array_n = %w[n N]
+  if array_y.include?(parent)
     student = Student.new(age, name)
     add_person(student, elements)
-  elsif arrayN.include?(parent)
+  elsif array_n.include?(parent)
     student = Student.new(age, name, p_permission: false)
     add_person(student, elements)
   else
