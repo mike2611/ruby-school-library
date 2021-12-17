@@ -1,40 +1,46 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ ruby
 
 require './teacher'
 require './student'
 require './book'
 require './rental'
 
-$people = []
-$books = []
+class Elements
+  attr_accessor :people, :books
 
-def add_book
+  def initialize
+    @people = []
+    @books = []
+  end
+end
+
+def add_book(elements)
   print 'Title: '
   title = gets
   print 'Author: '
   author = gets
   book = Book.new(title, author)
-  $books.push(book)
+  elements.books.push(book)
   puts 'Book created successfully'
 end
 
-def show_books
-  $books.each { |book| print "Title: #{book.title.chomp}, Author: #{book.author}" }
+def show_books(elements)
+  elements.books.each { |book| print "Title: #{book.title.chomp}, Author: #{book.author}" }
 end
 
-def get_book
+def get_book(elements)
   puts 'Select a book from the following list by number'
-  $books.each_with_index { |book, index| print "#{index}) Title: #{book.title.chomp}, Author: #{book.author}" }
+  elements.books.each_with_index { |book, index| print "#{index}) Title: #{book.title.chomp}, Author: #{book.author}" }
   gets.chomp.to_i
 end
 
-def add_person(person)
-  $people.push(person)
+def add_person(person, elements)
+  elements.people.push(person)
   puts 'Person created successfully'
 end
 
-def show_people
-  $people.each do |person|
+def show_people(elements)
+  elements.people.each do |person|
     if person.instance_of? Student
       print "[Student] Name: #{person.name.chomp}, ID: #{person.id.to_s.chomp}, Age: #{person.age}"
     else
@@ -43,9 +49,9 @@ def show_people
   end
 end
 
-def get_person
+def get_person(elements)
   puts 'Select a prson from the following list by number (not id)'
-  $people.each_with_index do |person, index|
+  elements.people.each_with_index do |person, index|
     if person.instance_of? Student
       print "#{index}) [Student] Name: #{person.name.chomp}, ID: #{person.id.to_s.chomp}, Age: #{person.age}"
     else
@@ -55,87 +61,96 @@ def get_person
   gets.chomp.to_i
 end
 
-def person_options
+def add_student(elements)
+  print 'Age: '
+  age = gets
+  print 'Name: '
+  name = gets
+  print 'Has parent permission? [Y/N]: '
+  parent = gets.chomp
+  arrayY = ['y', 'Y']
+  arrayN = ['N', 'N']
+  if arrayY.include?(parent)
+    student = Student.new(age, name)
+    add_person(student, elements)
+  elsif arrayN.include?(parent)
+    student = Student.new(age, name, p_permission: false)
+    add_person(student, elements)
+  else
+    puts 'Please only use (Y) or (N) options'
+  end
+end
+
+def add_teacher(elements)
+  print 'Age: '
+  age = gets
+  print 'Name: '
+  name = gets
+  print 'Specialization: '
+  specialization = gets
+  teacher = Teacher.new(age, specialization, name)
+  add_person(teacher, elements)
+end
+
+def person_options(elements)
   print 'Do you want to create a student (1) or a teacher (2)? [Input the number]'
   number = gets.chomp.to_i
   case number
   when 1
-    print 'Age: '
-    age = gets
-    print 'Name: '
-    name = gets
-    print 'Has parent permission? [Y/N]: '
-    parent = gets.chomp
-    if parent == 'y' || parent == 'Y'
-      student = Student.new(age, name)
-      add_person(student)
-    elsif parent == 'n' || parent == 'N'
-      student = Student.new(age, name, false)
-      add_person(student)
-    else
-      puts 'Please only use (Y) or (N) options'
-    end
+    add_student(elements)
   when 2
-    print 'Age: '
-    age = gets
-    print 'Name: '
-    name = gets
-    print 'Specialization: '
-    specialization = gets
-    teacher = Teacher.new(age, specialization, name)
-    add_person(teacher)
+    add_teacher(elements)
   else
     puts 'Please input a (1) or a (2) only'
   end
 end
 
-def create_rental
-  i_book = get_book
-  i_person = get_person
+def create_rental(elements)
+  i_book = get_book(elements)
+  i_person = get_person(elements)
   print 'Date: '
   date = gets.chomp
-  Rental.new(date, $books[i_book], $people[i_person])
+  Rental.new(date, elements.books[i_book], elements.people[i_person])
 end
 
-def list_rentals
+def list_rentals(elements)
   print 'ID of person: '
   id_person = gets.to_i
-  i_person = $people.index { |person| person.id == id_person }
+  i_person = elements.people.index { |person| person.id == id_person }
   if i_person.nil?
     puts 'Input a valid id'
   else
     puts 'Rentals: '
-    $people[i_person].rentals.each do |rental|
+    elements.people[i_person].rentals.each do |rental|
       print "Date: #{rental.date.chomp}, Book \"#{rental.book.title.chomp}\" by #{rental.book.author}"
     end
   end
 end
 
-def general_options(number)
+def general_options(number, elements)
   case number
   when 1
-    show_books
+    show_books(elements)
   when 2
-    show_people
+    show_people(elements)
   when 3
-    person_options
+    person_options(elements)
   when 4
-    add_book
+    add_book(elements)
   when 5
-    create_rental
+    create_rental(elements)
   when 6
-    list_rentals
-  when 7
-    puts 'Goodbye'
+    list_rentals(elements)
   else
-    puts "\n\nPlease select an option (1 - 7)"
+    puts 'Goodbye'
   end
 end
 
 def main
+  elements = Elements.new
   number = 1
   puts "Welcome to School Library App!\n\n"
-  while (number != 7)
+  while number.positive? && number < 7
     puts "\n\nPlease choose an option by entering a number: "
     puts '1 - List all books'
     puts '2 - List all people'
@@ -143,10 +158,10 @@ def main
     puts '4 - Create a book'
     puts '5 - Create a rental'
     puts '6 - List all rentals for a given person id'
-    puts '7 - Exit'
+    puts 'Any other key - Exit'
     number = gets.chomp.to_i
-    general_options(number)
+    general_options(number, elements)
   end
 end
 
-main()
+main
